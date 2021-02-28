@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  gateway:
+    build: .
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@gateway_db:5432/${POSTGRES_DB}
+    volumes:
+      - ./static:/app/static
+      - ./data/media:/app/media
+    depends_on:
+      - gateway_db
+
+  gateway_db:
+    image: postgres:9.6-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ./data/pg_data:/var/lib/postgresql/data:z
+
+  gateway_nginx:
+    build: ./nginx
+    ports:
+      - 8000:8000
+    volumes:
+      - ./static:/static
+    depends_on:
+      - gateway
+
+networks:
+  default:
+    external:
+      name: matcha-network
