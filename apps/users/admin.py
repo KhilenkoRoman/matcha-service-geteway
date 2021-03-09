@@ -2,13 +2,19 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext, gettext_lazy as _
-from apps.users.models import User
+from apps.users.models import User, UserInfo
+
+
+class UserInfoInline(admin.StackedInline):
+    model = UserInfo
 
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     list_display = ('email',)
     readonly_fields = ("date_joined",)
+    inlines = (UserInfoInline,)
+
     # override fieldsets to remove groups permissions
     fieldsets = (
         (None, {'fields': ('email', 'password')}),

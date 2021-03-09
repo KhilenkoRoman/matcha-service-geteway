@@ -3,6 +3,7 @@ import uuid
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, BaseUserManager
 from django.db import models
+from config.constraints import GENDER_CHOICES
 
 
 class UserManager(BaseUserManager):
@@ -44,12 +45,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=64, blank=True, null=True)
     last_name = models.CharField(max_length=64, blank=True, null=True)
 
-    is_superuser = models.BooleanField(default=False, help_text='Designates whether the user is actually superuser.', verbose_name='Super Admin',)
-    is_staff = models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='Baker Consultant',)
-    is_active = models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='Active User',)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     date_joined = models.DateField(auto_now_add=True)
-
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -60,3 +60,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ['-date_joined']
+
+
+class UserInfo(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_info')
+    birth_date = models.DateField()
+    gender = models.SmallIntegerField(choices=GENDER_CHOICES)

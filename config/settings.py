@@ -134,6 +134,7 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
 }
+
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'apps.users.views.jwt_response_payload_handler'
 }

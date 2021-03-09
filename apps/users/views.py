@@ -1,7 +1,7 @@
-# Create your views here.
-from .serializers import UserSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+
+from .serializers import UserSerializer, UserCreateSerializer
 
 
 def jwt_response_payload_handler(token, user=None, request=None):
@@ -11,9 +11,6 @@ def jwt_response_payload_handler(token, user=None, request=None):
     }
 
 
-class GenericLeasesView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get(self, request):
-
-        return Response(data='data', status=status.HTTP_200_OK)
+class RegistrationView(generics.CreateAPIView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = UserCreateSerializer
