@@ -32,8 +32,7 @@ class UserAdmin(BaseUserAdmin):
         (_('Permissions'), {
             'fields': ('is_active', ),
         }),
-        (_('Personal info'), {'fields': ('first_name', 'last_name',
-                                         'company', 'partner_company')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name',)}),
     )
     ordering = ('email',)
     search_fields = ['email']
